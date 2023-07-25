@@ -14,4 +14,58 @@
       }
     })
   })
+
+  function hasPrivileges(groups) {
+    let hasPrivilegesFlag = false;
+    const privilegesGroups = ["Silver", "Gold", "Diamond"];
+
+    privilegesGroups.forEach((group) => {
+      if (groups.some((item) => item.name === group)) {
+        hasPrivilegesFlag = true;
+      }
+    });
+
+    return hasPrivilegesFlag;
+  }
+
+  const user = api.getCurrentUser();
+  if (user && !hasPrivileges(user.groups)) {
+    api.decorateCooked(
+      ($elem, helper) => {
+        if (helper.widget.parentWidget.attrs.firstPost === true) {
+          const $childElement = $(`
+          <div style="background-color: #fafafa; color: #454545; max-height: 140px; height: auto; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px;">
+            <iframe src="https://manage-briefing.6do.news/world/ads/youtube" height="100" width="100%" scrolling="no" border="0" marginwidth="0" frameborder="0"></iframe>
+          </div>
+        `);
+
+          if ($elem.children().length === 0) {
+            return;
+          } else if ($elem.children().length === 1) {
+            $elem.children().first().after($childElement);
+          } else {
+            const childCount = $elem.children().length;
+            const isEven = childCount % 2 === 0;
+
+            if (isEven) {
+              const middleIndex = childCount / 2;
+              $elem
+                .children()
+                .eq(middleIndex - 1)
+                .after($childElement);
+            } else {
+              const middleIndex = Math.floor(childCount / 2) + 1;
+              $elem
+                .children()
+                .eq(middleIndex - 1)
+                .after($childElement);
+            }
+          }
+        }
+      },
+      {
+        onlyStream: true,
+      }
+    );
+  }
 </script>
