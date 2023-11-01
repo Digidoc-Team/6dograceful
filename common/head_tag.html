@@ -1,15 +1,22 @@
 <script type="text/discourse-plugin" version="0.8">
   $( document ).ready(function() {
     api.onPageChange((url, title) =>{
-      const targetComponent = this.querySelector('.banner-ad')
+      const targetComponent = this.querySelector('.banner-ad');
+      const youtubeAd = this.querySelector('.youtube');
       const router = api.container.lookup('service:router');
       if ( router.currentRoute.name.includes('chat') ) {
           if (targetComponent) {
               $(targetComponent).addClass('hide');
           }
+	  if (youtubeAd) {
+            $(youtubeAd).addClass('hide');
+          }
       } else {
         if (targetComponent) {
             $(targetComponent).removeClass('hide');
+        }
+	if (youtubeAd) {
+          $(youtubeAd).removeClass('hide');
         }
       }
     })
